@@ -67,6 +67,29 @@
 		</dependency>
 
 
+
+		<!-- Jakarta Validation -->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version> <!-- Use the latest version available -->
+		</dependency>
+
+		<!-- Hibernate Validator (Implementation of Jakarta Validation) -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>7.0.3.Final</version> <!-- Use the latest version available -->
+		</dependency>
+
+		<!-- For Bean Validation and Date Time API support -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

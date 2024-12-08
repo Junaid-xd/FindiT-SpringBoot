@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="FindITAplication" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.FindiT.Find.iT.FindITApplication" />
+    <module name="Find-iT" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

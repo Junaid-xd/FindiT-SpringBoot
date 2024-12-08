@@ -1,34 +1,54 @@
+
+
 package com.FindiT.Find.iT.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Integer postID;
-
-    @Column(name = "userID", insertable = false, updatable = false) // Optional if you want to map it for non-relational use
-    private Integer userID;
 
     private String productName;
     private Integer status;
     private String location;
+    private Integer userID;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    @Column(name="date", nullable = false, updatable = false)
+    private LocalDateTime date = LocalDateTime.now();
 
     @Column(length = 1000)
     private String description;
 
     private String imgPath;
 
+
     @ManyToOne
-    @JoinColumn(name = "userID", referencedColumnName = "userID") // Ensure "userID" exists in the `Users` entity
-    private Users user; // Match this field name with `mappedBy` in `Users`
+    @JoinColumn(name = "fk_user_ID")
+    @JsonBackReference
+    private Users user;
+
+    public Post() {
+
+    }
+
+    public Post(String productName, Integer postID, Integer status, String location, Integer userID, LocalDateTime date, String description, String imgPath, Users user) {
+        this.productName = productName;
+        this.postID = postID;
+        this.status = status;
+        this.location = location;
+        this.userID = userID;
+        this.date = date;
+        this.description = description;
+        this.imgPath = imgPath;
+        this.user = user;
+    }
+
 
     // Getters and Setters
     public Integer getPostID() {
@@ -37,14 +57,6 @@ public class Post {
 
     public void setPostID(Integer postID) {
         this.postID = postID;
-    }
-
-    public Integer getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Integer userID) {
-        this.userID = userID;
     }
 
     public String getProductName() {
@@ -71,12 +83,20 @@ public class Post {
         this.location = location;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 
     public String getDescription() {
@@ -103,3 +123,28 @@ public class Post {
         this.user = user;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
