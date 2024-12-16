@@ -17,4 +17,6 @@ public interface PostService {
     public String deletePost(Integer postid);
 
     public boolean postExists(Integer postid);
+
+    public List<Post> getPostsByUserID(Integer userID);
 }

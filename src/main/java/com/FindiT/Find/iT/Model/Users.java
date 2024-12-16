@@ -84,7 +84,7 @@ import java.util.List;
 public class Users {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer userID;
 
     private String username;
@@ -94,9 +94,9 @@ public class Users {
     private boolean isBlocked;
 
     // One User can have many Posts (One-to-Many Relationship)
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Post> posts = new ArrayList<>();  // Initialize the posts list to avoid NPE
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Post> posts = new ArrayList<>();
 
     public Users(){
 
@@ -104,7 +104,7 @@ public class Users {
 
     public Users(Integer userID, List<Post> posts, boolean isBlocked, String contact, String imgPath, String password, String username) {
         this.userID = userID;
-        this.posts = posts;
+//        this.posts = posts;
         this.isBlocked = isBlocked;
         this.contact = contact;
         this.imgPath = imgPath;
@@ -153,28 +153,14 @@ public class Users {
         this.contact = contact;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
+//    public List<Post> getPosts() {
+//        return posts;
+//    }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
+//    public void setPosts(List<Post> posts) {
+//        this.posts = posts;
+//    }
 
-    // Utility methods for bidirectional relationship (if needed)
-    public void addPost(Post post) {
-        if (post != null && !posts.contains(post)) {
-            posts.add(post);
-            // No need to set the user object, as we now only store the userID in the Post
-        }
-    }
-
-    public void removePost(Post post) {
-        if (post != null && posts.contains(post)) {
-            posts.remove(post);
-            // No need to remove the user object, as we now only store the userID in the Post
-        }
-    }
 
     public boolean getBlocked() {
         return isBlocked;

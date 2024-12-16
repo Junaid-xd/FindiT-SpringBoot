@@ -7,22 +7,19 @@ import jakarta.persistence.*;
 public class Admin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer adminID;
 
     private String name;
 
     private String password;
 
-    private String imgPath;
-
     public Admin(){
 
     }
 
-    public Admin(Integer adminID, String imgPath, String password, String name) {
+    public Admin(Integer adminID,  String password, String name) {
         this.adminID = adminID;
-        this.imgPath = imgPath;
         this.password = password;
         this.name = name;
     }
@@ -34,14 +31,6 @@ public class Admin {
 
     public void setAdminID(Integer adminID) {
         this.adminID = adminID;
-    }
-
-    public String getImgPath() {
-        return imgPath;
-    }
-
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
     }
 
     public String getPassword() {

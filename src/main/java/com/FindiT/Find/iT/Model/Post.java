@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 public class Post {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer postID;
 
     private String productName;
     private Integer status;
     private String location;
-    private Integer userID;
+    //private Integer userID;
 
     @Column(name="date", nullable = false, updatable = false)
     private LocalDateTime date = LocalDateTime.now();
@@ -30,7 +30,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "fk_user_ID")
-    @JsonBackReference
+    // @JsonBackReference
     private Users user;
 
     public Post() {
@@ -42,7 +42,7 @@ public class Post {
         this.postID = postID;
         this.status = status;
         this.location = location;
-        this.userID = userID;
+        //this.userID = userID;
         this.date = date;
         this.description = description;
         this.imgPath = imgPath;
@@ -91,13 +91,13 @@ public class Post {
         this.date = date;
     }
 
-    public Integer getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Integer userID) {
-        this.userID = userID;
-    }
+//    public Integer getUserID() {
+//        return userID;
+//    }
+//
+//    public void setUserID(Integer userID) {
+//        this.userID = userID;
+//    }
 
     public String getDescription() {
         return description;
