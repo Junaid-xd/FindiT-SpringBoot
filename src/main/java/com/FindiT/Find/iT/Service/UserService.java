@@ -20,4 +20,6 @@ public interface UserService {
     public String deleteUser(Integer userid);
 
     public boolean userExists(Integer userid);
+
+    public boolean usernameAlreadyExists(String username);
 }

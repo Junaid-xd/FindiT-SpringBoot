@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/data/users")
-@CrossOrigin
+@CrossOrigin    
 public class UsersController {
 
     @Autowired
@@ -38,8 +38,13 @@ public class UsersController {
     }
 
     @PostMapping("/addUser")
-    public Users addUser(@RequestBody Users newuser){
-        return userService.create(newuser);
+    public ResponseEntity<?> addUser(@RequestBody Users newuser){
+        if(userService.usernameAlreadyExists(newuser.getUsername())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exixts");
+        }
+        else {
+            return ResponseEntity.ok(userService.create(newuser));
+        }
     }
 
     @GetMapping("/id/{userid}")
@@ -93,6 +98,18 @@ public class UsersController {
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with ID: "+ userID+" not found.");
+    }
+
+
+
+    @GetMapping("/verifyUsername/{username}")
+    public boolean usernameAlreadyExists(@PathVariable String username){
+        if(userService.usernameAlreadyExists(username)){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }
