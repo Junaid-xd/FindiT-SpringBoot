@@ -1,14 +1,19 @@
 
 
+
+
+
+
+
 package com.FindiT.Find.iT.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
-public class Post {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // You can also use SINGLE_TABLE or TABLE_PER_CLASS
+public abstract class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,38 +22,23 @@ public class Post {
     private String productName;
     private Integer status;
     private String location;
-    //private Integer userID;
 
-    @Column(name="date", nullable = false, updatable = false)
+    @Column(name = "date", nullable = false, updatable = false)
     private LocalDateTime date = LocalDateTime.now();
-
-    @Column(length = 1000)
-    private String description;
-
-    private String imgPath;
-
 
     @ManyToOne
     @JoinColumn(name = "fk_user_ID")
-    // @JsonBackReference
     private Users user;
 
     public Post() {
-
     }
 
-    public Post(String productName, Integer postID, Integer status, String location, Integer userID, LocalDateTime date, String description, String imgPath, Users user) {
+    public Post(String productName, Integer status, String location, Users user) {
         this.productName = productName;
-        this.postID = postID;
         this.status = status;
         this.location = location;
-        //this.userID = userID;
-        this.date = date;
-        this.description = description;
-        this.imgPath = imgPath;
         this.user = user;
     }
-
 
     // Getters and Setters
     public Integer getPostID() {
@@ -91,30 +81,6 @@ public class Post {
         this.date = date;
     }
 
-//    public Integer getUserID() {
-//        return userID;
-//    }
-//
-//    public void setUserID(Integer userID) {
-//        this.userID = userID;
-//    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImgPath() {
-        return imgPath;
-    }
-
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
-    }
-
     public Users getUser() {
         return user;
     }
@@ -123,28 +89,4 @@ public class Post {
         this.user = user;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -21,29 +20,10 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.save(newadmin);
     }
 
-    @Override
-    public Admin updateAdmin(Admin admin) {
-        return adminRepository.save(admin);
-    }
 
     @Override
     public List<Admin> getAllAdmins() {
         return adminRepository.findAll();
-    }
-
-    @Override
-    public boolean adminExists(Integer adminID) {
-        return adminRepository.existsById(adminID);
-    }
-
-    @Override
-    public Admin getAdminByID(Integer adminID) {
-        Optional<Admin> adminOptional = adminRepository.findById(adminID);
-        if (adminOptional.isPresent()) {
-            return adminOptional.get();
-        } else {
-            throw new RuntimeException("Admin not found with ID: " + adminID);
-        }
     }
 }
 

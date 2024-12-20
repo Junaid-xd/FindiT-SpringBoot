@@ -1,7 +1,10 @@
+
+
 package com.FindiT.Find.iT.Controllers;
 
-
 import com.FindiT.Find.iT.Model.Post;
+import com.FindiT.Find.iT.Model.PostWithDescription;
+import com.FindiT.Find.iT.Model.PostWithImage;
 import com.FindiT.Find.iT.Model.Users;
 import com.FindiT.Find.iT.Service.CloudinaryService;
 import com.FindiT.Find.iT.Service.PostService;
@@ -32,113 +35,107 @@ public class PostsController {
         this.cloudinaryService = cloudinaryService;
     }
 
-
     @PostMapping("/addPostWithDescription")
-    public ResponseEntity<?> addPostWithDescription(@RequestParam("productName") String productName,
-                                       @RequestParam("status") Integer status,
-                                       @RequestParam("location") String location,
-                                       @RequestParam("description") String description,
-                                       @RequestParam("userid") Integer userID){
+    public ResponseEntity<?> addPostWithDescription(
+            @RequestParam("productName") String productName,
+            @RequestParam("status") Integer status,
+            @RequestParam("location") String location,
+            @RequestParam("description") String description,
+            @RequestParam("userid") Integer userID) {
 
-        if(userService.userExists(userID)){
-            Post newpost = new Post();
-            newpost.setImgPath(null);
-            newpost.setProductName(productName);
-            newpost.setDescription(description);
-            newpost.setStatus(status);
-            newpost.setLocation(location);
-
+        if (userService.userExists(userID)) {
             Users postMakerUser = userService.getUserByID(userID);
-            newpost.setUser(postMakerUser);
 
-            return ResponseEntity.ok(postService.create(newpost));
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with ID: "+ userID+ " not found.");
+            PostWithDescription newPost = new PostWithDescription(
+                    productName, status, location, postMakerUser, description
+            );
+
+            return ResponseEntity.ok(postService.create(newPost));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID: " + userID + " not found.");
         }
     }
-
-
-
 
     @PostMapping("/addPostWithImage")
-    public ResponseEntity<?> addPostByImage(@RequestParam("file") MultipartFile file,
-                               @RequestParam("productName") String productName,
-                               @RequestParam("status") Integer status,
-                               @RequestParam("location") String location,
-                               @RequestParam("userid") Integer userID ) throws IOException {
+    public ResponseEntity<?> addPostWithImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("productName") String productName,
+            @RequestParam("status") Integer status,
+            @RequestParam("location") String location,
+            @RequestParam("userid") Integer userID) throws IOException {
 
-        if(userService.userExists(userID)){
-
-            String cloudImagePath = null;
-            Post newpost = new Post();
-            newpost.setDescription(null);
-            newpost.setProductName(productName);
-            newpost.setStatus(status);
-            newpost.setLocation(location);
+        if (userService.userExists(userID)) {
+            String cloudImagePath = cloudinaryService.uploadFile(file);
+            if (cloudImagePath == null) {
+                return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+                        .body("Error occurred while uploading image to the cloud.");
+            }
 
             Users postMakerUser = userService.getUserByID(userID);
-            newpost.setUser(postMakerUser);
 
-            cloudImagePath = cloudinaryService.uploadFile(file);
-            if(cloudImagePath==null){
-                return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Error occurred while uploading image at cloud");
-            }
-            newpost.setImgPath(cloudImagePath);
+            PostWithImage newPost = new PostWithImage(
+                    productName, status, location, postMakerUser, cloudImagePath
+            );
 
-
-            return ResponseEntity.ok(postService.create(newpost));
-
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with ID: "+ userID);
+            return ResponseEntity.ok(postService.create(newPost));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID: " + userID + " not found.");
         }
     }
-
-
-
-
 
     @GetMapping("/getPosts")
-    public ResponseEntity<?> getAllPosts(){
-
+    public ResponseEntity<?> getAllPosts() {
         List<Post> allPosts = postService.getAllPosts();
 
-        if(!allPosts.isEmpty()){
+        if (!allPosts.isEmpty()) {
             return ResponseEntity.ok(allPosts);
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Currently no posts in Database");
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body("Currently no posts in the database.");
         }
     }
-
 
     @GetMapping("/userId/{userID}")
     public ResponseEntity<?> getPostsByUserID(@PathVariable Integer userID) {
-
-        if(userService.userExists(userID)){
+        if (userService.userExists(userID)) {
             List<Post> userPosts = postService.getPostsByUserID(userID);
 
-            if(userPosts.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("This user don't have any posts yet.");
-            }
-            else{
+            if (userPosts.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("This user has no posts yet.");
+            } else {
                 return ResponseEntity.ok(userPosts);
             }
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with userID: "+ userID+" do not exist.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID: " + userID + " does not exist.");
         }
     }
-
 
     @DeleteMapping("/delete/{postid}")
     public ResponseEntity<?> deletePost(@PathVariable Integer postid) {
-        if (!postService.postExists(postid)) { // Check if the post exists
+        if (!postService.postExists(postid)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No such post exists with ID: " + postid);
         }
-        postService.deletePost(postid); // Perform the delete
+        postService.deletePost(postid);
         return ResponseEntity.ok("Post deleted with ID: " + postid);
     }
+
+    @PutMapping("/recover/{postid}")
+    public ResponseEntity<?> recoverPost(@PathVariable Integer postid){
+        if (postService.postExists(postid)){
+            Post postToBeRecoverd = postService.getPostByPostID(postid);
+
+            postToBeRecoverd.setStatus(3);
+
+            return ResponseEntity.ok(postService.updatePost(postToBeRecoverd));
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post don't exist with postID: "+ postid);
+        }
+    }
 }
+

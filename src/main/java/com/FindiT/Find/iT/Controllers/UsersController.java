@@ -1,8 +1,10 @@
+
+
 package com.FindiT.Find.iT.Controllers;
 
-import com.FindiT.Find.iT.Model.Post;
 import com.FindiT.Find.iT.Model.Users;
 import com.FindiT.Find.iT.Service.CloudinaryService;
+import com.FindiT.Find.iT.Service.PostService;
 import com.FindiT.Find.iT.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,9 @@ public class UsersController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PostService postService;
     private final CloudinaryService cloudinaryService;
 
     public UsersController(CloudinaryService cloudinaryService) {
@@ -72,9 +77,11 @@ public class UsersController {
     @DeleteMapping("/delete/{userid}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userid) {
         if (!userService.userExists(userid)) {
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found with ID: " + userid);
         }
+        postService.deletePostsByUserID(userid);
         userService.deleteUser(userid);
         return ResponseEntity.ok("User deleted with ID: " + userid);
     }

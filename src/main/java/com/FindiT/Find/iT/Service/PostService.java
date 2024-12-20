@@ -1,3 +1,7 @@
+
+
+
+
 package com.FindiT.Find.iT.Service;
 
 
@@ -19,4 +23,10 @@ public interface PostService {
     public boolean postExists(Integer postid);
 
     public List<Post> getPostsByUserID(Integer userID);
+
+    public Post getPostByPostID(Integer postid);
+
+    public Post updatePost(Post post);
+
+    public void deletePostsByUserID(Integer userid);
 }

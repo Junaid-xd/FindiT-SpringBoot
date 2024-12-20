@@ -11,13 +11,7 @@ public interface AdminService {
 
     public Admin create(Admin newAdmin);
 
-    public Admin updateAdmin(Admin admin);
-
     public List<Admin> getAllAdmins();
-
-    public boolean adminExists(Integer adminID);
-
-    public Admin getAdminByID(Integer adminID) ;
 }
 
 
