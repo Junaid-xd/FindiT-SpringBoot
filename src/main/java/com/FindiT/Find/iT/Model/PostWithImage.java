@@ -1,3 +1,4 @@
+
 package com.FindiT.Find.iT.Model;
 
 import jakarta.persistence.Entity;

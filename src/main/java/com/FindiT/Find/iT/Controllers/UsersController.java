@@ -27,6 +27,7 @@ public class UsersController {
     private PostService postService;
     private final CloudinaryService cloudinaryService;
 
+
     public UsersController(CloudinaryService cloudinaryService) {
         this.cloudinaryService = cloudinaryService;
     }
@@ -108,15 +109,15 @@ public class UsersController {
     }
 
 
-
     @GetMapping("/verifyUsername/{username}")
     public boolean usernameAlreadyExists(@PathVariable String username){
-        if(userService.usernameAlreadyExists(username)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return userService.usernameAlreadyExists(username);
     }
 
+    @GetMapping("/veriyCredentials")
+    public boolean verifyCredentials(@RequestParam String username,
+                                     @RequestParam String password){
+        return userService.existsByUsernameAndPassword(username, password);
+
+    }
 }

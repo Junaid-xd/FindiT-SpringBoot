@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
-			<version>3.0.2</version> <!-- Use the latest version available -->
+			<version>3.0.2</version>
 		</dependency>
 
 		<!-- Hibernate Validator (Implementation of Jakarta Validation) -->

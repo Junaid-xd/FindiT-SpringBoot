@@ -3,8 +3,6 @@
 
 
 
-
-
 package com.FindiT.Find.iT.Model;
 
 import jakarta.persistence.*;
@@ -12,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // You can also use SINGLE_TABLE or TABLE_PER_CLASS
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // It ensures that there would be a single table in database
 public abstract class Post {
 
     @Id
