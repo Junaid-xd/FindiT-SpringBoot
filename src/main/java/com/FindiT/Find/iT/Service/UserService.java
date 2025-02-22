@@ -22,6 +22,10 @@ public interface UserService {
     public boolean userExists(Integer userid);
 
     public boolean usernameAlreadyExists(String username);
+//      previous
+//    public boolean existsByUsernameAndPassword(String username, String password);
+//      updated
+    public Users findByUsernameAndPassword(String username, String password);
 
-    public boolean existsByUsernameAndPassword(String username, String password);
+
 }

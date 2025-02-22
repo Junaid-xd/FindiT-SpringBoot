@@ -57,10 +57,15 @@ public class UserServiceImpl implements UserService {
     public boolean usernameAlreadyExists(String username) {
         return userRepository.existsByUsername(username);
     }
-
-    @Override
-    public boolean existsByUsernameAndPassword(String username, String password) {
-        return userRepository.existsByUsernameAndPassword(username, password);
+//previous
+//    @Override
+//    public boolean existsByUsernameAndPassword(String username, String password) {
+//        return userRepository.existsByUsernameAndPassword(username, password);
+//    }
+// updated
+    public Users findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password);
     }
+
 
 }

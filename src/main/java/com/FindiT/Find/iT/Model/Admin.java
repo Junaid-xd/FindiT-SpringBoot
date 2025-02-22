@@ -9,7 +9,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer adminID;
-
+    @Column(name = "username", unique = true, nullable = false)
     private String name;
 
     private String password;

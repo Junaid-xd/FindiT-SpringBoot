@@ -110,14 +110,27 @@ public class UsersController {
 
 
     @GetMapping("/verifyUsername/{username}")
-    public boolean usernameAlreadyExists(@PathVariable String username){
+    public boolean usernameAlreadyExists(@PathVariable String username) {
         return userService.usernameAlreadyExists(username);
     }
+//     previous
+//    @GetMapping("/verifyCredentials")
+//    public boolean verifyCredentials(@RequestParam String username,
+//                                     @RequestParam String password){
+//        return userService.existsByUsernameAndPassword(username, password);
+//
+//    }
 
-    @GetMapping("/veriyCredentials")
-    public boolean verifyCredentials(@RequestParam String username,
-                                     @RequestParam String password){
-        return userService.existsByUsernameAndPassword(username, password);
-
+//    updated
+@GetMapping("/getUserByCredentials")
+public ResponseEntity<Users> getUserByCredentials(@RequestParam String username,
+                                                 @RequestParam String password) {
+    Users user = userService.findByUsernameAndPassword(username, password);
+    if (user != null) {
+        return ResponseEntity.ok(user); // 200 OK with user object
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 Unauthorized
     }
+}
+
 }
